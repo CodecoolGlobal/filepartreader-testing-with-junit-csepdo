@@ -25,14 +25,14 @@ public class FilePartReader {
         this.toLine = toLine;
     }
 
-    public String read(String filePath) {
+    public String read() {
         ArrayList<String> tempList = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(this.filePath))) {
             String sCurrentLine;
             while ((sCurrentLine = br.readLine()) != null) {
-                tempList.add(sCurrentLine);
+                tempList.add(sCurrentLine + "\n");
             }
-            String wholeText = tempList.toString();
+            String wholeText = String.join(" ", tempList);
             return wholeText;
         } catch (
                 IOException e) {
@@ -42,12 +42,11 @@ public class FilePartReader {
     }
 
     public String readLines() {
-        String wholeText = read(this.filePath);
-        String separator = (System.getProperty("os.name").startsWith("windows")) ? "\n" : "\r\n";
-        String[] tempArray = wholeText.split(separator);
+        String wholeText = read();
+        String[] tempArray = wholeText.split("\n");
         ArrayList<String> filePartList = new ArrayList<>();
-        filePartList.addAll(Arrays.asList(tempArray).subList(fromLine, toLine + 1));
-        filePart = filePartList.toString();
+        filePartList.addAll(Arrays.asList(tempArray).subList(fromLine - 1, toLine));
+        filePart = String.join(" ", filePartList);
         return filePart;
     }
 
