@@ -20,9 +20,13 @@ public class FilePartReader {
     }
 
     public void setup(String filePath, Integer fromLine, Integer toLine) throws IllegalArgumentException {
-        this.filePath = filePath;
-        this.fromLine = fromLine;
-        this.toLine = toLine;
+        if (fromLine > 0 && toLine >= fromLine && filePath.length() > 0) {
+            this.filePath = filePath;
+            this.fromLine = fromLine;
+            this.toLine = toLine;
+        } else {
+            throw new IllegalArgumentException("Invalid line number");
+        }
     }
 
     public String read() {
@@ -46,7 +50,7 @@ public class FilePartReader {
         String[] tempArray = wholeText.split("\n");
         ArrayList<String> filePartList = new ArrayList<>();
         filePartList.addAll(Arrays.asList(tempArray).subList(fromLine - 1, toLine));
-        filePart = String.join(" ", filePartList);
+        filePart = String.join("", filePartList);
         return filePart;
     }
 
